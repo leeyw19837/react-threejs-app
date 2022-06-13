@@ -15,6 +15,7 @@ class ThreeMap extends Component{
 		let stats;
 		let camera, scene, renderer;
 		let group;
+		let control;
 		let container = document.getElementById('WebGL-output');
 		let width = container.clientWidth,height = container.clientHeight;
 
@@ -35,6 +36,7 @@ class ThreeMap extends Component{
 			//控制地球
 			let orbitControls = new /*THREE.OrbitControls*/Orbitcontrols(camera);
         	orbitControls.autoRotate = false;
+        	control = orbitControls
         	// let clock = new THREE.Clock();
         	//光源
         	let ambi = new THREE.AmbientLight(0x686868);
@@ -47,7 +49,7 @@ class ThreeMap extends Component{
         	scene.add(spotLight);
 			// Texture
 			let loader = new THREE.TextureLoader();
-			let planetTexture = require("./assets/imgs/planets/Earth.png");
+			let planetTexture = require("./assets/imgs/planets/Mars_2k-050104.png");
 
 			loader.load( planetTexture, function ( texture ) {
 				let geometry = new THREE.SphereGeometry( 200, 20, 20 );
@@ -57,7 +59,7 @@ class ThreeMap extends Component{
 			} );
 
 			renderer = new THREE.WebGLRenderer();
-			renderer.setClearColor( 0xffffff );
+			renderer.setClearColor( '#000' );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			renderer.setSize( width, height );
 			container.appendChild( renderer.domElement );
@@ -69,10 +71,13 @@ class ThreeMap extends Component{
 		function animate() {
 			requestAnimationFrame( animate );
 			render();
-			stats.update();
+			// 使用 stats 控制交互
+			// stats.update();
+			// 或者使用 OrbitControl 控制交互
+			control.update()
 		}
 		function render() {		
-			group.rotation.y -= 0.005;  //这行可以控制地球自转
+			group.rotation.y -= 0.0001;  //这行可以控制地球自转
 			renderer.render( scene, camera );
 		}
 	}
